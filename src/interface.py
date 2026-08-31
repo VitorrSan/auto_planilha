@@ -1,5 +1,5 @@
 import customtkinter as ctk
-from Main import iniciar_automacao
+from src.Main import iniciar_automacao
 
 #  Configurações visuais 
 ctk.set_appearance_mode("dark")  # Modo escuro

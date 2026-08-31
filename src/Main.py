@@ -1,10 +1,10 @@
 import re
 
-from Conexao import conectar_erp
+from src.Conexao import conectar_erp
 from dotenv import load_dotenv
 load_dotenv()
-from Ultimo_valor_planilha import obter_ultimo_id
-from InserirDados import inserir_dados_rpa
+from src.Ultimo_valor_planilha import obter_ultimo_id
+from src.InserirDados import inserir_dados_rpa
 import pymysql
 from openpyxl import load_workbook
 import logging
