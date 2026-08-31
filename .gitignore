@@ -1,0 +1,14 @@
+# Ignora a pasta do ambiente virtual (ela é muito pesada e cada PC deve ter a sua)
+venv/
+
+# Ignora arquivos de log locais
+automacao_erp.log
+
+# Ignora arquivos de sistema e cache do Python
+__pycache__/
+.vscode/
+
+# Ignora planilhas com dados reais da empresa (Segurança de Dados)
+*.xlsx
+
+.env
