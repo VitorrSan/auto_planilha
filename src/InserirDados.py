@@ -1,12 +1,11 @@
 import xlwings as xw
 import openpyxl as xl
 
-def inserir_dados_rpa(dados_os):
+def inserir_dados_rpa(dados_os,caminho_arquivo):
     
-    print("Abrindo o Excel...")
     app = xw.App(visible=False)   
     try:   
-        wb = app.books.open("C:\\Users\\vitor\\OneDrive\\Documentos\\auto\\Base de dados_Ordem_de_Serviço_Máquinas (1).xlsx")
+        wb = app.books.open(caminho_arquivo)
         planilha = wb.sheets['Ordens de Serviço Máquinas']
         
         for os_atual  in dados_os:               
@@ -21,7 +20,7 @@ def inserir_dados_rpa(dados_os):
            planilha.range(f'A{linha_vazia}').value = [lista_os]
           
         wb.save()
-        print("✅ Dados inseridos com sucesso na planilha!") 
+        print("Abrindo o Excel...\n✅ Dados inseridos com sucesso na planilha!")
     finally:
         
         wb.close()

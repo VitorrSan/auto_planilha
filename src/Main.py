@@ -1,16 +1,13 @@
 import re
-
-from src.Conexao import conectar_erp
+from Conexao import conectar_erp
+from pathlib import Path
 from dotenv import load_dotenv
 load_dotenv()
-from src.Ultimo_valor_planilha import obter_ultimo_id
-from src.InserirDados import inserir_dados_rpa
+from Ultimo_valor_planilha import obter_ultimo_id
+from InserirDados import inserir_dados_rpa
 import pymysql
 from openpyxl import load_workbook
 import logging
-
-from xlwings import ret
-
 
 
 # Configuração global do Diário de Bordo (Logging)
@@ -21,21 +18,20 @@ logging.basicConfig(
     format='%(asctime)s - [%(levelname)s] - %(message)s',
     datefmt='%d/%m/%Y %H:%M:%S'
 )
-
 logging.info("Iniciando rotina de busca de Ordens de Servico.")
 
-
-
-def iniciar_automacao():
+def iniciar_automacao(caminho_arquivo):
     try: 
         conexao = conectar_erp()
         with conexao.cursor() as c:
-            c.execute(f"SELECT * FROM ordem_servico where id >{obter_ultimo_id()}")
+            c.execute(f"SELECT * FROM ordem_servico where id >{obter_ultimo_id(caminho_arquivo)}")
             res= c.fetchall()      
         conexao.close()
 
+        ultimo_id = obter_ultimo_id(caminho_arquivo)
+    
         if res:
-            inserir_dados_rpa(res)
+            inserir_dados_rpa(res,caminho_arquivo)
             logging.info(f"Sucesso! {len(res)} novas OSs foram inseridas na planilha.")
             return (f"Sucesso! {len(res)} novas OSs foram inseridas na planilha.")
         else:
@@ -68,9 +64,11 @@ def iniciar_automacao():
 
     except PermissionError as erro_arquivo:
         logging.error(f"❌ Ocorreu um erro ao abrir o arquivo: {erro_arquivo}")
-        return(f"❌ Ocorreu um erro ao abrir o arquivo,Por favor, verifique se o arquivo 'Base de dados_Ordem_de_Serviço_Máquinas.xlsx' está aberto por outro usuário ou por outro programa e tente novamente {erro_arquivo}")
+        return(f"❌ Ocorreu um erro ao abrir o arquivo,Por favor, verifique se o arquivo 'Base de dados_Ordem_de_Serviço_Máquinas.xlsx' está aberto por outro usuário ou por outro programa e tente novamente")
             
     except Exception as erro_geral:
         logging.error(f"❌ Ocorreu um erro na automação: {erro_geral}")
         return(f"❌ Ocorreu um erro na automação: {erro_geral}, \n Por favor contate a equipe de TI!")
+
+        
 
